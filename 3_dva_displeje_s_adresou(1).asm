@@ -17,13 +17,12 @@
 	eit	
 
 mvi c, 0 ;operacia plus -> 1, minus -> 2, deleno -> 3
-mvi d, 0 ;stav 0 -> vyber cisla ; 1-> vyber operacie, stav 2 -> vyber cisla , stav 3 -> vypocet	
+mvi d, 0 ;stav 0 -> vyber cisla ; 1-> vyber  cisla, stav 2 -> vyber operacie, stav 3 -> vypocet	
 Start:
-
-jmp Start
-
+	cmi d, 2
+	jmp Start
+	
 int07: 
-
 	mvi a,1110b ;riadok 1
 	out 0111b,a 
 	inn a,0 
@@ -44,39 +43,46 @@ int07:
 	ani a, 00001111b 
 	cmi a , 0111b 
 	jzr osem
+
+	mvi a,0111b ; riadok 4
+	out 0111b,a 
+	inn a,0 
+	ani a, 00001111b 
+	cmi a , 0111b 
+	jzr reset
 	
-	mvi	a,0
-	out	0,a		;aktivacia celej klavesnice
-	eit
-	ret
-
-
+	jmp endPrerus
 nula:
-	mvi D,0
-	pus d
-	;scall dsp	
-	mvi	a,0
-	out	0,a		;aktivacia celej klavesnice
-	eit
-	ret
+	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	jzr endPrerus
 
+	mvi b, 0 
+	str d, b ;uloz do ramky cislo (nula)
+	inc d
+	
+	jmp endPrerus
 styri:
-	mvi D,4
-	pus d
-	;scall dsp	
-	mvi	a,0
-	out	0,a		;aktivacia celej klavesnice
-	eit
-	ret
-osem:
-	mvi D,8
-	pus d
-	;scall dsp	
-	mvi	a,0
-	out	0,a		;aktivacia celej klavesnice
-	eit
-	ret
+	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	jzr endPrerus
 
+	mvi b,4
+	str d, b
+	inc d
+
+	jmp endPrerus
+osem:
+	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	jzr endPrerus
+
+	mvi b,8
+	str d, b
+	inc d
+
+	jmp endPrerus
+reset:
+	mvi d, 0
+	;TODO: reset displejov :D
+	jmp endPrerus
 int11:
 	mvi a,1110b ;riadok 1
 	out 0111b,a 
@@ -99,34 +105,34 @@ int11:
 	cmi a , 1011b 
 	jzr devet
 	
-	mvi	a,0
-	out	0,a		;aktivacia celej klavesnice
-	eit
-	ret
+	jmp endPrerus
 jeden:
-	mvi D,1
-	pus d
-	;scall dsp	
-	mvi	a,0
-	out	0,a		;aktivacia celej klavesnice
-	eit
-	ret
+	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	jzr endPrerus
+
+	mvi b,1
+	str d, b
+	inc d
+	
+	jmp endPrerus
 pat:
-	mvi D,5
-	pus d
-	;scall dsp	
-	mvi	a,0
-	out	0,a		;aktivacia celej klavesnice
-	eit
-	ret
+	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	jzr endPrerus
+
+	mvi b,5
+	str d, b
+	inc d
+	
+	jmp endPrerus
 devet:
-	mvi D,9
-	pus d
-	;scall dsp	
-	mvi	a,0
-	out	0,a		;aktivacia celej klavesnice
-	eit
-	ret
+	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	jzr endPrerus
+
+	mvi b,9
+	str d, b
+	inc d
+	
+	jmp endPrerus
 int13:
 	mvi a,1110b ;riadok 1
 	out 0111b,a 
@@ -147,21 +153,23 @@ int13:
 	eit
 	ret
 dva:
-	mvi D,2
-	pus d
-	;scall dsp	
-	mvi	a,0
-	out	0,a		;aktivacia celej klavesnice
-	eit
-	ret
+	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	jzr endPrerus
+
+	mvi b,2
+	str d, b
+	inc d
+	
+	jmp endPrerus
 sest:
-	mvi D,6
-	pus d
-	;scall dsp	
-	mvi	a,0
-	out	0,a		;aktivacia celej klavesnice
-	eit
-	ret
+	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	jzr endPrerus
+
+	mvi b,6
+	str d, b
+	inc d
+	
+	jmp endPrerus
 int14:
 	mvi a,1110b ;riadok 1
 	out 0111b,a 
@@ -177,24 +185,27 @@ int14:
 	cmi a , 1110b 
 	jzr sedem
 	
-	mvi	a,0
-	out	0,a		;aktivacia celej klavesnice
-	eit
-	ret
-
+	jmp endPrerus
 tri:
-	mvi D,3
-	pus d
-	;scall dsp	
-	mvi	a,0
-	out	0,a		;aktivacia celej klavesnice
-	eit
-	ret
+	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	jzr endPrerus
+
+	mvi b,3
+	str d, b
+	inc d
+	
+	jmp endPrerus
 sedem:
-	mvi D,7
-	pus d
-	;scall dsp	
+	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	jzr endPrerus
+
+	mvi b,7
+	str d, b
+	inc d
+
+	jmp endPrerus
+endPrerus:
 	mvi	a,0
-	out	0,a		;aktivacia celej klavesnice
+	out	0,a	;aktivacia celej klavesnice
 	eit
 	ret
