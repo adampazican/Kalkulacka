@@ -1,30 +1,12 @@
-;Zobrazenie znakov na dvoch displejoch
-;Prvy displej: AB0=0
-;Druhy displej: AB1=0
-;Schema - dva_displeje_s_adresou.schx
+mvi	a,00000011b	;znak 0 
+out	1110b,a		;displej 1
 
-	;mvi	a,0x0d		;znak '3' 
-	;out	1110b,a		;1. displej
+mvi	a, 00000011b
+out	1101b,a	
 
-	;mvi	a,0x99		;znak '4'
-	;out	1101b,a		;2. displej
-
-	;mvi	a,0x41
-	;out	1011b,a		;3. displej
-
-	;mvi	a,0
-	;out	0111b,a		
-	;eit	
-
-	mvi	a, 00000011b	;znak '3' 
-	out	1110b,a		;1. displej
-
-	mvi	a, 00000011b	;znak '4'
-	out	1101b,a		;2. displej
-
-	mvi	a, 00000011b
-	out	1011b,a
-	eit
+mvi	a, 00000011b
+out	1011b,a
+eit
 
 mvi c, 0 ;operacia plus -> 1, minus -> 2, deleno -> 3
 mvi d, 0 ;stav 0 -> vyber cisla ; 1-> vyber  cisla, stav 2 -> vyber operacie, stav 3 -> vypocet	
@@ -138,7 +120,7 @@ int07:
 	
 	jmp endPrerus
 nula:
-	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	cmi d, 2 ;zakaze tlacidlo v mode vyberu operacii
 	jzr endPrerus
 
 	mvi b, 0 
@@ -147,7 +129,7 @@ nula:
 	
 	jmp endPrerus
 styri:
-	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	cmi d, 2 ;zakaze tlacidlo v mode vyberu operacii
 	jzr endPrerus
 
 	mvi b,4
@@ -156,7 +138,7 @@ styri:
 
 	jmp endPrerus
 osem:
-	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	cmi d, 2 ;zakaze tlacidlo v mode vyberu operacii
 	jzr endPrerus
 
 	mvi b,8
@@ -208,7 +190,7 @@ int11:
 	
 	jmp endPrerus
 jeden:
-	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	cmi d, 2 ;zakaze tlacidlo v mode vyberu operacii
 	jzr endPrerus
 
 	mvi b,1
@@ -217,7 +199,7 @@ jeden:
 	
 	jmp endPrerus
 pat:
-	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	cmi d, 2 ;zakaze tlacidlo v mode vyberu operacii
 	jzr endPrerus
 
 	mvi b,5
@@ -226,7 +208,7 @@ pat:
 	
 	jmp endPrerus
 devet:
-	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	cmi d, 2 ;zakaze tlacidlo v mode vyberu operacii
 	jzr endPrerus
 
 	mvi b,9
@@ -235,8 +217,11 @@ devet:
 	
 	jmp endPrerus
 plus:
-	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	cmi d, 2 ;zakaze tlacidlo v mode vyberu cisel
 	jnz endPrerus
+	mvi	b,00000011b		;reset displeja 0 aby neostal minus
+	out	1110b,b
+
 	mvi b, 0
 	ldr b, b
 
@@ -270,7 +255,7 @@ int13:
 	
 	jmp endPrerus
 dva:
-	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	cmi d, 2 ;zakaze tlacidlo v mode vyberu operacii
 	jzr endPrerus
 
 	mvi b,2
@@ -279,7 +264,7 @@ dva:
 	
 	jmp endPrerus
 sest:
-	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	cmi d, 2 ;zakaze tlacidlo v mode vyberu operacii
 	jzr endPrerus
 
 	mvi b,6
@@ -288,7 +273,7 @@ sest:
 	
 	jmp endPrerus
 minus:
-	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	cmi d, 2 ;zakaze tlacidlo v mode vyberu cisel
 	jnz endPrerus
 
 	mvi b, 1
@@ -340,7 +325,7 @@ int14:
 	
 	jmp endPrerus
 tri:
-	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	cmi d, 2 ;zakaze tlacidlo v mode vyberu operacii
 	jzr endPrerus
 
 	mvi b,3
@@ -349,7 +334,7 @@ tri:
 	
 	jmp endPrerus
 sedem:
-	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	cmi d, 2 ;zakaze tlacidlo v mode vyberu operacii
 	jzr endPrerus
 
 	mvi b,7
@@ -358,8 +343,11 @@ sedem:
 
 	jmp endPrerus
 krat:
-	cmi d, 2 ;zakaze tlacidl0 v mode vyberu operacii
+	cmi d, 2 ;zakaze tlacidlo v mode vyberu cisel
 	jnz endPrerus
+
+	mvi	b,00000011b		;reset displeja 0 aby neostal minus
+	out	1110b,b
 
 	mvi b, 1
 	ldr b, b
